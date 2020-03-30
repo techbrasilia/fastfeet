@@ -10,6 +10,7 @@ class Delivery extends Model {
         end_date: Sequelize.DATE,
       },
       {
+        tableName: 'delivery',
         sequelize,
       }
     );
