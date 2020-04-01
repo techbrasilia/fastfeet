@@ -26,6 +26,11 @@ routes.post('/sessions', SessionController.store);
 
 // Rotas de entregas por entregador
 routes.get('/deliveryman/:id/deliveries', DeliveryDeliverymanController.index);
+routes.put(
+  '/deliveryman/:id/removal',
+  upload.single('file'),
+  DeliveryDeliverymanController.update
+);
 
 routes.use(authMiddleware);
 
