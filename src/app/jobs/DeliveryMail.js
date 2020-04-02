@@ -20,6 +20,7 @@ class DeliveryMail {
       context: {
         deliveryman: deliveryman.name,
         product: delivery.product,
+        delivery: delivery.id,
         recipient: recipient.name,
         rua: recipient.rua,
         numero: recipient.numero,

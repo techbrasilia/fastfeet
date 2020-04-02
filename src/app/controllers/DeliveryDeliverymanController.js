@@ -40,7 +40,7 @@ class DeliveryDeliverymanController {
     const deliveryman = await Deliveryman.findByPk(req.params.id);
 
     if (!deliveryman) {
-      return res.status(400).json({ error: `Entregador não existe` });
+      return res.status(400).json({ error: 'Entregador não existe.' });
     }
 
     const horario = [
@@ -95,13 +95,13 @@ class DeliveryDeliverymanController {
     const delivery = await Delivery.findByPk(delivery_id);
 
     if (!delivery) {
-      return res.status(400).json({ error: `Entrega não encontrada` });
+      return res.status(400).json({ error: 'Entrega não encontrada.' });
     }
     /** Valida entregador da entrega e entregador da retirada */
     if (delivery.deliveryman_id !== deliveryman.id) {
       return res
         .status(401)
-        .json({ error: 'Essa entrega não está disponível para você' });
+        .json({ error: 'Essa entrega não está disponível para você.' });
     }
 
     /** Verifica se é uma 'entrega de produto' e se foi retirado */
@@ -109,7 +109,13 @@ class DeliveryDeliverymanController {
       if (!delivery.start_date) {
         return res
           .status(400)
-          .json({ error: `O produto não foi retirado para entrega` });
+          .json({ error: 'O produto não foi retirado para entrega.' });
+      }
+
+      if (delivery.end_date) {
+        return res
+          .status(400)
+          .json({ error: 'O produto já foi entregue ao destinatário.' });
       }
 
       if (!req.file) {
@@ -126,14 +132,16 @@ class DeliveryDeliverymanController {
       });
 
       delivery.update({ end_date: dataEntrega, signature_id: file.id });
-      return res.json({ message: 'O produto foi entregue com sucesso' });
+      return res.json({
+        message: 'O produto foi entregue ao destinatário com sucesso!',
+      });
     }
 
     /** Verifica se o produto ja foi 'retirado' */
     if (delivery.start_date) {
       return res
         .status(400)
-        .json({ error: `O produto já foi retirado para entrega` });
+        .json({ error: 'O produto já foi retirado para entrega.' });
     }
 
     /** Valida qtd de retiradas do dia */
@@ -149,7 +157,7 @@ class DeliveryDeliverymanController {
     if (qtdRetidadas === 5) {
       return res
         .status(401)
-        .json({ error: 'Limite de retiradas por dia já alcançado' });
+        .json({ error: 'Limite de retiradas por dia já alcançado.' });
     }
 
     /** Realiza a retirada do produto */

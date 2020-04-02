@@ -11,6 +11,7 @@ import DeliverymanController from './app/controllers/DeliverymanController';
 import FileController from './app/controllers/FileController';
 import DeliveryController from './app/controllers/DeliveryController';
 import DeliveryDeliverymanController from './app/controllers/DeliveryDeliverymanController';
+import DeliveryProblemController from './app/controllers/DeliveryProblemController';
 
 const upload = multer(multerConfig);
 
@@ -32,6 +33,9 @@ routes.put(
   DeliveryDeliverymanController.update
 );
 
+// Rota de cadastro de problemas
+routes.post('/delivery/:id/problems', DeliveryProblemController.store);
+
 routes.use(authMiddleware);
 
 // Rotas de destinatarios
@@ -49,7 +53,10 @@ routes.delete('/deliverymen/:id', DeliverymanController.delete);
 // Rotas de entregas
 routes.post('/deliveries', DeliveryController.store);
 
-// criar um model e controller
-// esse desafio não possui cadastro de users, fiz a listagem para treinar
+// Rotas problemas
+routes.get('/delivery/problems', DeliveryProblemController.index);
+routes.get('/delivery/:id/problems', DeliveryProblemController.index);
+
+routes.delete('/problem/:id/cancel_delivery', DeliveryProblemController.update);
 
 export default routes;
