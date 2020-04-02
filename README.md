@@ -1,7 +1,10 @@
 # fastfeet
 Esse projeto faz parte do desafio do curso bootcamp - GoStack
 
-Desafio 3 - 
+Desafio 3 - Completo
+
+
+
 
 Abaixo a explicação do que deverá ser feito - (DEPOIS VOU APAGAR E DEIXAR AQUI A DESCRIÇÃO DO PROJETO)
 Durante esse desafio vamos aprimorar a aplicação FastFeet que demos início no desafio anterior implementando funcionalidades que aprendemos durante as aulas até agora.
