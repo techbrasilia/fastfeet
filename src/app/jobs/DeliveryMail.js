@@ -8,7 +8,7 @@ class DeliveryMail {
   async handle({ data }) {
     const { delivery, deliveryman, recipient } = data;
 
-    console.log('A fila executou');
+    // console.log('A fila executou');
 
     // console.log(deliveryman);
     // console.log(recipient);
