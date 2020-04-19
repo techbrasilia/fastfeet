@@ -1,10 +1,8 @@
-# fastfeet
+# fastfeet - Fábio Rodrigues de Carvalho
+
 Esse projeto faz parte do desafio do curso bootcamp - GoStack
 
 Desafio 3 - Completo
-
-
-
 
 Abaixo a explicação do que deverá ser feito - (DEPOIS VOU APAGAR E DEIXAR AQUI A DESCRIÇÃO DO PROJETO)
 Durante esse desafio vamos aprimorar a aplicação FastFeet que demos início no desafio anterior implementando funcionalidades que aprendemos durante as aulas até agora.
@@ -13,7 +11,7 @@ Funcionalidades do administrador
 Abaixo estão descritas as funcionalidades que você deve adicionar em sua aplicação para administradores.
 
 1. Gestão de entregadores
-Permita que o administrador possa cadastrar entregadores para a plataforma, o entregador deve possuir os seguintes campos:
+   Permita que o administrador possa cadastrar entregadores para a plataforma, o entregador deve possuir os seguintes campos:
 
 id (id do entregador)
 name (nome do entregador);
@@ -26,7 +24,7 @@ Crie rotas para listagem/cadastro/atualização/remoção de entregadores;
 Obs.: Essa funcionalidade é para administradores autenticados na aplicação.
 
 2. Gestão de encomendas
-Apesar do entregador estar cadastrado, ele não é independente dentro da plataforma, e você deve cadastrar encomendas para os entregadores.
+   Apesar do entregador estar cadastrado, ele não é independente dentro da plataforma, e você deve cadastrar encomendas para os entregadores.
 
 Nessa funcionalidade criaremos um cadastro de encomendas por entregador, a encomenda possui os campos:
 
@@ -56,19 +54,19 @@ Funcionalidades do entregador
 Abaixo estão descritas as funcionalidades que você deve adicionar em sua aplicação para os entregadores.
 
 1. Visualizar encomendas
-Para que o entregador possa visualizar suas encomendas, ele deverá informar apenas seu ID de cadastro (ID do entregador no banco de dados). Essa funcionalidade deve retornar as encomendas atribuidas a ele, que não estejam entregues ou canceladas;
+   Para que o entregador possa visualizar suas encomendas, ele deverá informar apenas seu ID de cadastro (ID do entregador no banco de dados). Essa funcionalidade deve retornar as encomendas atribuidas a ele, que não estejam entregues ou canceladas;
 
 Permita também que ele liste apenas as encomendas que já foram entregues por ele, com base em seu ID de cadastro;
 
 Exemplo de requisição: GET https://fastfeet.com/deliveryman/1/deliveries
 
 2. Alterar status de encomendas
-Você deve permitir que o entregador tenha rotas para incluir uma data de retirada (start_date) e data de entrega (end_date) para as encomendas. O entregador só pode fazer 5 retiradas por dia.
+   Você deve permitir que o entregador tenha rotas para incluir uma data de retirada (start_date) e data de entrega (end_date) para as encomendas. O entregador só pode fazer 5 retiradas por dia.
 
 Obs.: Para a funcionalidade de finalizar a entrega, você deverá permitir o envio de uma imagem que irá preencher o campo signature_id da tabela de encomendas.
 
 3. Cadastrar problemas nas entregas
-O entregador nem sempre conseguirá entregar as encomendas com sucesso, algumas vezes o destinatário pode estar ausente, ou o próprio entregador poderá ter algum problema com seu veículo na hora de entregar.
+   O entregador nem sempre conseguirá entregar as encomendas com sucesso, algumas vezes o destinatário pode estar ausente, ou o próprio entregador poderá ter algum problema com seu veículo na hora de entregar.
 
 A tabela delivery_problems deve conter os seguintes campos:
 
