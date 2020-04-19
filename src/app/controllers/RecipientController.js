@@ -1,7 +1,25 @@
 import * as Yup from 'yup';
+import { Op } from 'sequelize';
 import Recipient from '../models/Recipient';
 
 class RecipientController {
+  async index(req, res) {
+    if (!req.query || req.query.q === '' || req.query.q === undefined) {
+      const recipients = await Recipient.findAll({ order: ['id'] });
+
+      return res.json(recipients);
+    }
+
+    const recipients = await Recipient.findAll({
+      where: {
+        name: { [Op.iLike]: `%${req.query.q}%` },
+      },
+      order: ['id'],
+    });
+
+    return res.json(recipients);
+  }
+
   async store(req, res) {
     const schema = Yup.object().shape({
       name: Yup.string()

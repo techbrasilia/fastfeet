@@ -39,6 +39,7 @@ routes.post('/delivery/:id/problems', DeliveryProblemController.store);
 routes.use(authMiddleware);
 
 // Rotas de destinatarios
+routes.get('/recipients', RecipientController.index);
 routes.post('/recipients', RecipientController.store);
 routes.put('/recipients/:id', RecipientController.update);
 
@@ -51,6 +52,7 @@ routes.put('/deliverymen/:id', DeliverymanController.update);
 routes.delete('/deliverymen/:id', DeliverymanController.delete);
 
 // Rotas de entregas
+routes.get('/deliveries', DeliveryController.index);
 routes.post('/deliveries', DeliveryController.store);
 
 // Rotas problemas
