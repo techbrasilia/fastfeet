@@ -53,6 +53,7 @@ routes.delete('/deliverymen/:id', DeliverymanController.delete);
 
 // Rotas de entregas
 routes.get('/deliveries', DeliveryController.index);
+routes.get('/deliveries/:id', DeliveryController.show);
 routes.post('/deliveries', DeliveryController.store);
 
 // Rotas problemas

@@ -15,6 +15,9 @@ class DeliveryController {
           {
             model: Deliveryman,
           },
+          {
+            model: Recipient,
+          },
         ],
       });
 
@@ -30,10 +33,34 @@ class DeliveryController {
         {
           model: Deliveryman,
         },
+        {
+          model: Recipient,
+        },
       ],
     });
 
     return res.json(deliveries);
+  }
+
+  async show(req, res) {
+    const { id } = req.params;
+
+    const delivery = await Delivery.findOne({
+      where: {
+        id,
+      },
+      order: [['id', 'DESC']],
+      include: [
+        {
+          model: Deliveryman,
+        },
+        {
+          model: Recipient,
+        },
+      ],
+    });
+
+    return res.json(delivery);
   }
 
   async store(req, res) {

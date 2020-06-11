@@ -25,10 +25,12 @@ class DeliveryDeliverymanController {
             }
           : null,
       },
+      attributes: ['id', 'product', 'start_date', 'end_date', 'recipient_id'],
       order: [['id', 'DESC']],
       include: [
         {
           model: Deliveryman,
+          attributes: ['id', 'name', 'email', 'avatar_id'],
         },
       ],
     });
@@ -60,7 +62,7 @@ class DeliveryDeliverymanController {
     /** Data da retirada da entrega == hoje */
     const dataAtual = Number(new Date());
 
-    const disponibilidade = horario.map(time => {
+    const disponibilidade = horario.map((time) => {
       const [hour, minute] = time.split(':');
       const value = setSeconds(
         setMinutes(setHours(dataAtual, hour), minute),

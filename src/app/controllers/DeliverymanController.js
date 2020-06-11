@@ -22,12 +22,8 @@ class DeliverymanController {
 
   async store(req, res) {
     const schema = Yup.object().shape({
-      name: Yup.string()
-        .required()
-        .min(3),
-      email: Yup.string()
-        .email()
-        .required(),
+      name: Yup.string().required().min(3),
+      email: Yup.string().email().required(),
     });
 
     if (!(await schema.isValid(req.body))) {
