@@ -10,7 +10,7 @@ class DeliveryController {
   async index(req, res) {
     if (!req.query || req.query.q === '' || req.query.q === undefined) {
       const deliveries = await Delivery.findAll({
-        order: [['id', 'DESC']],
+        order: [['id']],
         include: [
           {
             model: Deliveryman,
@@ -28,7 +28,7 @@ class DeliveryController {
       where: {
         product: { [Op.iLike]: `%${req.query.q}%` },
       },
-      order: [['id', 'DESC']],
+      order: [['id']],
       include: [
         {
           model: Deliveryman,
@@ -63,7 +63,18 @@ class DeliveryController {
     return res.json(delivery);
   }
 
+  async update(req, res) {
+    const { id } = req.params;
+    const delivery = await Delivery.findByPk(id);
+
+    await delivery.update(req.body);
+
+    return res.json(delivery);
+  }
+
   async store(req, res) {
+    console.log('dados para inserir:', req.body);
+
     const { recipient_id, deliveryman_id, product } = req.body;
 
     const delivery = await Delivery.create({

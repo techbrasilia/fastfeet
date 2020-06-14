@@ -5,7 +5,7 @@ import Deliveryman from '../models/Deliveryman';
 class DeliverymanController {
   async index(req, res) {
     if (!req.query || req.query.q === '' || req.query.q === undefined) {
-      const deliverymen = await Deliveryman.findAll({ order: ['id'] });
+      const deliverymen = await Deliveryman.findAll({ order: ['name'] });
 
       return res.json(deliverymen);
     }
@@ -14,7 +14,7 @@ class DeliverymanController {
       where: {
         name: { [Op.iLike]: `%${req.query.q}%` },
       },
-      order: ['id'],
+      order: ['name'],
     });
 
     return res.json(deliverymen);

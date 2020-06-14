@@ -5,7 +5,7 @@ import Recipient from '../models/Recipient';
 class RecipientController {
   async index(req, res) {
     if (!req.query || req.query.q === '' || req.query.q === undefined) {
-      const recipients = await Recipient.findAll({ order: ['id'] });
+      const recipients = await Recipient.findAll({ order: ['name'] });
 
       return res.json(recipients);
     }
@@ -14,7 +14,7 @@ class RecipientController {
       where: {
         name: { [Op.iLike]: `%${req.query.q}%` },
       },
-      order: ['id'],
+      order: ['name'],
     });
 
     return res.json(recipients);
