@@ -20,6 +20,14 @@ class DeliverymanController {
     return res.json(deliverymen);
   }
 
+  async show(req, res) {
+    const { id } = req.params;
+
+    const deliveryman = await Deliveryman.findByPk(id);
+
+    return res.json(deliveryman);
+  }
+
   async store(req, res) {
     const schema = Yup.object().shape({
       name: Yup.string().required().min(3),
