@@ -6,17 +6,25 @@ import Deliveryman from '../models/Deliveryman';
 
 class DeliveryProblemController {
   async index(req, res) {
-    if (req.params.id) {
-      const problems = await DeliveryProblem.findByPk(req.params.id);
+    const { page = 1 } = req.query;
+    const problems = await DeliveryProblem.findAll({
+      limit: 10,
+      offset: (page - 1) * 10,
+    });
 
-      if (!problems || problems.length === 0) {
-        return res.status(400).json({ message: 'Nenhum problema encontrado.' });
-      }
-
-      return res.json(problems);
+    if (!problems || problems.length === 0) {
+      return res.status(400).json({ message: 'Nenhum problema encontrado.' });
     }
 
-    const problems = await DeliveryProblem.findAll();
+    const total = await DeliveryProblem.count();
+
+    return res.json({ dados: problems, count: total });
+  }
+
+  async show(req, res) {
+    const problems = await DeliveryProblem.findOne({
+      where: { delivery_id: req.params.id },
+    });
 
     if (!problems || problems.length === 0) {
       return res.status(400).json({ message: 'Nenhum problema encontrado.' });

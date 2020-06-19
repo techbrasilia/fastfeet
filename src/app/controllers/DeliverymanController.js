@@ -4,20 +4,32 @@ import Deliveryman from '../models/Deliveryman';
 
 class DeliverymanController {
   async index(req, res) {
-    if (!req.query || req.query.q === '' || req.query.q === undefined) {
-      const deliverymen = await Deliveryman.findAll({ order: ['name'] });
+    const { page = 1 } = req.query;
 
-      return res.json(deliverymen);
+    if (!req.query || req.query.q === '' || req.query.q === undefined) {
+      const deliverymen = await Deliveryman.findAll({
+        order: ['id'],
+        limit: 10,
+        offset: (page - 1) * 10,
+      });
+
+      const total = await Deliveryman.count();
+
+      return res.json({ dados: deliverymen, count: total });
     }
 
     const deliverymen = await Deliveryman.findAll({
       where: {
         name: { [Op.iLike]: `%${req.query.q}%` },
       },
-      order: ['name'],
+      order: ['id'],
+      limit: 10,
+      offset: (page - 1) * 10,
     });
 
-    return res.json(deliverymen);
+    const total = await Deliveryman.count();
+
+    return res.json({ dados: deliverymen, count: total });
   }
 
   async show(req, res) {
@@ -67,7 +79,7 @@ class DeliverymanController {
     const deliveryman = await Deliveryman.findByPk(id);
 
     if (email && email !== deliveryman.email) {
-      const deliverymanExists = await Deliveryman.findOne({ email });
+      const deliverymanExists = await Deliveryman.findOne({ where: { email } });
 
       if (deliverymanExists) {
         return res

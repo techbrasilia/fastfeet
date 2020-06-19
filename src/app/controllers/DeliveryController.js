@@ -1,3 +1,4 @@
+import * as Yup from 'yup';
 import { Op } from 'sequelize';
 import Queue from '../../lib/Queue';
 
@@ -8,9 +9,13 @@ import Recipient from '../models/Recipient';
 
 class DeliveryController {
   async index(req, res) {
+    const { page = 1 } = req.query;
+
     if (!req.query || req.query.q === '' || req.query.q === undefined) {
       const deliveries = await Delivery.findAll({
         order: [['id']],
+        limit: 10,
+        offset: (page - 1) * 10,
         include: [
           {
             model: Deliveryman,
@@ -21,7 +26,9 @@ class DeliveryController {
         ],
       });
 
-      return res.json(deliveries);
+      const total = await Delivery.count();
+
+      return res.json({ dados: deliveries, count: total });
     }
 
     const deliveries = await Delivery.findAll({
@@ -29,6 +36,8 @@ class DeliveryController {
         product: { [Op.iLike]: `%${req.query.q}%` },
       },
       order: [['id']],
+      limit: 10,
+      offset: (page - 1) * 10,
       include: [
         {
           model: Deliveryman,
@@ -39,7 +48,9 @@ class DeliveryController {
       ],
     });
 
-    return res.json(deliveries);
+    const total = await Delivery.count();
+
+    return res.json({ dados: deliveries, count: total });
   }
 
   async show(req, res) {
@@ -73,7 +84,15 @@ class DeliveryController {
   }
 
   async store(req, res) {
-    console.log('dados para inserir:', req.body);
+    const schema = Yup.object().shape({
+      recipient_id: Yup.number().required(),
+      deliveryman_id: Yup.number().required(),
+      product: Yup.string().min(3).required(),
+    });
+
+    if (!(await schema.isValid(req.body))) {
+      return res.status(400).json({ error: 'Validation fails' });
+    }
 
     const { recipient_id, deliveryman_id, product } = req.body;
 
@@ -93,6 +112,24 @@ class DeliveryController {
     });
 
     return res.json(delivery);
+  }
+
+  async delete(req, res) {
+    const delivery = await Delivery.findByPk(req.params.id);
+
+    if (!delivery) {
+      return res.status(400).json({ error: 'Encomenda não encontrada.' });
+    }
+
+    if (delivery.start_date || delivery.canceled_at) {
+      return res
+        .status(400)
+        .json({ error: 'A encomenda não pode ser excluída.' });
+    }
+
+    await delivery.destroy();
+
+    return res.status(200).json({ success: 'Encomenda deletada com sucesso' });
   }
 }
 export default new DeliveryController();

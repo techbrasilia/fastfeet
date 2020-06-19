@@ -42,6 +42,7 @@ routes.use(authMiddleware);
 routes.get('/recipients', RecipientController.index);
 routes.post('/recipients', RecipientController.store);
 routes.put('/recipients/:id', RecipientController.update);
+routes.get('/recipients/:id', RecipientController.show);
 
 routes.post('/files', upload.single('file'), FileController.store);
 
@@ -57,10 +58,11 @@ routes.get('/deliveries', DeliveryController.index);
 routes.get('/deliveries/:id', DeliveryController.show);
 routes.post('/deliveries', DeliveryController.store);
 routes.put('/deliveries/:id', DeliveryController.update);
+routes.delete('/deliveries/:id', DeliveryController.delete);
 
 // Rotas problemas
 routes.get('/delivery/problems', DeliveryProblemController.index);
-routes.get('/delivery/:id/problems', DeliveryProblemController.index);
+routes.get('/delivery/:id/problems', DeliveryProblemController.show);
 
 routes.delete('/problem/:id/cancel_delivery', DeliveryProblemController.update);
 

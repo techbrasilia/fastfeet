@@ -4,20 +4,40 @@ import Recipient from '../models/Recipient';
 
 class RecipientController {
   async index(req, res) {
-    if (!req.query || req.query.q === '' || req.query.q === undefined) {
-      const recipients = await Recipient.findAll({ order: ['name'] });
+    const { page = 1 } = req.query;
 
-      return res.json(recipients);
+    if (!req.query || req.query.q === '' || req.query.q === undefined) {
+      const recipients = await Recipient.findAll({
+        order: ['id'],
+        limit: 10,
+        offset: (page - 1) * 10,
+      });
+
+      const total = await Recipient.count();
+
+      return res.json({ dados: recipients, count: total });
     }
 
     const recipients = await Recipient.findAll({
       where: {
         name: { [Op.iLike]: `%${req.query.q}%` },
       },
-      order: ['name'],
+      order: ['id'],
+      limit: 10,
+      offset: (page - 1) * 10,
     });
 
-    return res.json(recipients);
+    const total = await Recipient.count();
+
+    return res.json({ dados: recipients, count: total });
+  }
+
+  async show(req, res) {
+    const { id } = req.params;
+
+    const recipient = await Recipient.findByPk(id);
+
+    return res.json(recipient);
   }
 
   async store(req, res) {
@@ -58,7 +78,7 @@ class RecipientController {
     if (!(await schema.isValid(req.body))) {
       return res.status(400).json({ error: 'Validation fails' });
     }
-
+    console.log('atualizacao: ', req.body);
     const { id } = req.params;
     const recipient = await Recipient.findByPk(id);
 
