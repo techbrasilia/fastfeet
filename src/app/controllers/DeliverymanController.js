@@ -1,6 +1,8 @@
 import * as Yup from 'yup';
 import { Op } from 'sequelize';
 import Deliveryman from '../models/Deliveryman';
+import Delivery from '../models/Delivery';
+import File from '../models/File';
 
 class DeliverymanController {
   async index(req, res) {
@@ -11,6 +13,13 @@ class DeliverymanController {
         order: ['id'],
         limit: 10,
         offset: (page - 1) * 10,
+        include: [
+          {
+            model: File,
+            as: 'avatar',
+            attributes: ['id', 'path', 'url'],
+          },
+        ],
       });
 
       const total = await Deliveryman.count();
@@ -25,6 +34,13 @@ class DeliverymanController {
       order: ['id'],
       limit: 10,
       offset: (page - 1) * 10,
+      include: [
+        {
+          model: File,
+          as: 'avatar',
+          attributes: ['id', 'path', 'url'],
+        },
+      ],
     });
 
     const total = await Deliveryman.count();
@@ -35,7 +51,16 @@ class DeliverymanController {
   async show(req, res) {
     const { id } = req.params;
 
-    const deliveryman = await Deliveryman.findByPk(id);
+    const deliveryman = await Deliveryman.findOne({
+      where: { id },
+      include: [
+        {
+          model: File,
+          as: 'avatar',
+          attributes: ['id', 'path', 'url'],
+        },
+      ],
+    });
 
     return res.json(deliveryman);
   }
@@ -97,7 +122,20 @@ class DeliverymanController {
     const deliveryman = await Deliveryman.findByPk(req.params.id);
 
     if (!deliveryman) {
-      return res.status(400).json({ message: 'Delivery man does not exist' });
+      return res
+        .status(400)
+        .json({ message: 'Delivery man does not exist', description: '' });
+    }
+
+    const totalDelivery = await Delivery.count({
+      where: { deliveryman_id: deliveryman.id },
+    });
+
+    if (totalDelivery > 0) {
+      return res.status(400).json({
+        message: 'Entregador não pode ser excluído.',
+        description: 'Há encomendas cadastradas para esse entregador.',
+      });
     }
 
     try {

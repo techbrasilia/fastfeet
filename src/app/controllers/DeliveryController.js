@@ -6,6 +6,7 @@ import Delivery from '../models/Delivery';
 import DeliveryMail from '../jobs/DeliveryMail';
 import Deliveryman from '../models/Deliveryman';
 import Recipient from '../models/Recipient';
+import File from '../models/File';
 
 class DeliveryController {
   async index(req, res) {
@@ -19,6 +20,13 @@ class DeliveryController {
         include: [
           {
             model: Deliveryman,
+            include: [
+              {
+                model: File,
+                as: 'avatar',
+                attributes: ['id', 'path', 'url'],
+              },
+            ],
           },
           {
             model: Recipient,
@@ -41,6 +49,13 @@ class DeliveryController {
       include: [
         {
           model: Deliveryman,
+          include: [
+            {
+              model: File,
+              as: 'avatar',
+              attributes: ['id', 'path', 'url'],
+            },
+          ],
         },
         {
           model: Recipient,

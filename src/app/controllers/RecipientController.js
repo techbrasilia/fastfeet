@@ -1,6 +1,7 @@
 import * as Yup from 'yup';
 import { Op } from 'sequelize';
 import Recipient from '../models/Recipient';
+import Delivery from '../models/Delivery';
 
 class RecipientController {
   async index(req, res) {
@@ -52,7 +53,6 @@ class RecipientController {
     }
 
     const { name, rua, numero, complemento, estado, cidade, cep } = req.body;
-    // console.log(req.body, req.userId);
 
     const recipient = await Recipient.create({
       name,
@@ -78,13 +78,41 @@ class RecipientController {
     if (!(await schema.isValid(req.body))) {
       return res.status(400).json({ error: 'Validation fails' });
     }
-    console.log('atualizacao: ', req.body);
+
     const { id } = req.params;
     const recipient = await Recipient.findByPk(id);
 
     await recipient.update(req.body);
 
     return res.json(recipient);
+  }
+
+  async delete(req, res) {
+    const recipient = await Recipient.findByPk(req.params.id);
+
+    if (!recipient) {
+      return res
+        .status(400)
+        .json({ message: 'Recipient man does not exist', description: '' });
+    }
+
+    const totalDelivery = await Delivery.count({
+      where: { recipient_id: recipient.id },
+    });
+
+    if (totalDelivery > 0) {
+      return res.status(400).json({
+        message: 'Destinatário não pode ser excluído.',
+        description: 'Há encomendas cadastradas para esse destinatário.',
+      });
+    }
+
+    try {
+      await recipient.destroy();
+    } catch (err) {
+      return res.json({ error: err });
+    }
+    return res.json({ message: ' Recipient man successfully deleted' });
   }
 }
 export default new RecipientController();

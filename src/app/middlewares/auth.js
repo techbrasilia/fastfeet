@@ -10,7 +10,6 @@ export default async (req, res, next) => {
   }
 
   const [, token] = authHeader.split(' ');
-  console.log(token);
 
   try {
     // promisify, transforma uma função que precisa de callback para utilizar
