@@ -11,6 +11,7 @@ import {
 import { Op } from 'sequelize';
 import Deliveryman from '../models/Deliveryman';
 import Delivery from '../models/Delivery';
+import Recipient from '../models/Recipient';
 import File from '../models/File';
 
 class DeliveryDeliverymanController {
@@ -19,18 +20,31 @@ class DeliveryDeliverymanController {
       where: {
         deliveryman_id: req.params.id,
         canceled_at: null,
-        end_date: req.body.deliveried
-          ? {
-              [Op.not]: null,
-            }
-          : null,
+        end_date:
+          req.query.deliveried === 'true'
+            ? {
+                [Op.not]: null,
+              }
+            : null,
       },
-      attributes: ['id', 'product', 'start_date', 'end_date', 'recipient_id'],
+      attributes: [
+        'id',
+        'product',
+        'start_date',
+        'end_date',
+        'recipient_id',
+        'created_at',
+        'status',
+      ],
       order: [['id', 'DESC']],
       include: [
         {
           model: Deliveryman,
           attributes: ['id', 'name', 'email', 'avatar_id'],
+        },
+
+        {
+          model: Recipient,
         },
       ],
     });

@@ -12,5 +12,6 @@ export default {
         return cb(null, res.toString('hex') + extname(file.originalname));
       });
     },
+    limits: { fieldSize: 25 * 1024 * 1024 },
   }),
 };

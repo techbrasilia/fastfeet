@@ -24,6 +24,7 @@ routes.get('/', async (req, res) => {
 routes.get('/users', UserController.index);
 
 routes.post('/sessions', SessionController.store);
+routes.get('/deliverymen/:id', DeliverymanController.show);
 
 // Rotas de entregas por entregador
 routes.get('/deliveryman/:id/deliveries', DeliveryDeliverymanController.index);
@@ -35,6 +36,9 @@ routes.put(
 
 // Rota de cadastro de problemas
 routes.post('/delivery/:id/problems', DeliveryProblemController.store);
+
+// Rota de lista de problemas
+routes.get('/delivery/:id?/problems', DeliveryProblemController.index);
 
 routes.use(authMiddleware);
 
@@ -49,7 +53,7 @@ routes.post('/files', upload.single('file'), FileController.store);
 
 // Rotas de entregadores
 routes.get('/deliverymen', DeliverymanController.index);
-routes.get('/deliverymen/:id', DeliverymanController.show);
+
 routes.post('/deliverymen', DeliverymanController.store);
 routes.put('/deliverymen/:id', DeliverymanController.update);
 routes.delete('/deliverymen/:id', DeliverymanController.delete);
@@ -62,7 +66,7 @@ routes.put('/deliveries/:id', DeliveryController.update);
 routes.delete('/deliveries/:id', DeliveryController.delete);
 
 // Rotas problemas
-routes.get('/delivery/:id?/problems', DeliveryProblemController.index);
+
 routes.get('/problems/:id', DeliveryProblemController.show);
 
 routes.delete('/problem/:id/cancel_delivery', DeliveryProblemController.update);
