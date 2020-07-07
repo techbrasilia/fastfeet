@@ -19,9 +19,9 @@ class DeliveryProblemController {
         }
       );
 
-      if (!problems || problems.length === 0) {
-        return res.status(200).json({ message: 'Nenhum problema encontrado.' });
-      }
+      // if (!problems || problems.length === 0) {
+      //   return res.status(200).json({ message: 'Nenhum problema encontrado.' });
+      // }
 
       const total = await DeliveryProblem.count();
 
@@ -33,9 +33,9 @@ class DeliveryProblemController {
       offset: (page - 1) * 10,
     });
 
-    if (!problems || problems.length === 0) {
-      return res.status(200).json({ message: 'Nenhum problema encontrado.' });
-    }
+    // if (!problems || problems.length === 0) {
+    //   return res.status(200).json({ message: 'Nenhum problema encontrado.' });
+    // }
 
     const total = await DeliveryProblem.count();
 
