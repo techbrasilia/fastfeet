@@ -31,6 +31,11 @@ class DeliveryController {
           {
             model: Recipient,
           },
+          {
+            model: File,
+            as: 'signature',
+            attributes: ['id', 'path', 'url'],
+          },
         ],
       });
 
@@ -60,6 +65,11 @@ class DeliveryController {
         {
           model: Recipient,
         },
+        {
+          model: File,
+          as: 'signature',
+          attributes: ['id', 'path', 'url'],
+        },
       ],
     });
 
@@ -82,6 +92,12 @@ class DeliveryController {
         },
         {
           model: Recipient,
+        },
+
+        {
+          model: File,
+          as: 'signature',
+          attributes: ['id', 'path', 'url'],
         },
       ],
     });

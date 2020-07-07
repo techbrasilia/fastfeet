@@ -52,6 +52,11 @@ class DeliveryDeliverymanController {
     return res.json(deliveries);
   }
 
+  /**
+   * Se não passar o end_date sera considerado retirada para entrega
+   * Com end_date será confirmação de entrega
+   *
+   */
   async update(req, res) {
     const deliveryman = await Deliveryman.findByPk(req.params.id);
 
@@ -95,16 +100,21 @@ class DeliveryDeliverymanController {
       disponibilidade[disponibilidade.length - 1].value
     );
 
-    /** Valida se a data/hora esta entre o horario permitido */
-    if (isBefore(dataAtual, iniRetirada) || isAfter(dataAtual, fimRetirada)) {
-      return res.status(401).json({
+    const { delivery_id, end_date } = req.query;
+
+    /** Valida se a data/hora esta entre o horario permitido
+     * e se não é confirmação de entrega
+     */
+    if (
+      !end_date &&
+      (isBefore(dataAtual, iniRetirada) || isAfter(dataAtual, fimRetirada))
+    ) {
+      return res.status(200).json({
         error: `Retiradas apenas das ${disponibilidade[0].time} às ${
           disponibilidade[disponibilidade.length - 1].time
         }`,
       });
     }
-
-    const { delivery_id, end_date } = req.query;
 
     const dataEntrega = Number(end_date);
 
@@ -116,7 +126,7 @@ class DeliveryDeliverymanController {
     /** Valida entregador da entrega e entregador da retirada */
     if (delivery.deliveryman_id !== deliveryman.id) {
       return res
-        .status(401)
+        .status(200)
         .json({ error: 'Essa entrega não está disponível para você.' });
     }
 
@@ -124,19 +134,19 @@ class DeliveryDeliverymanController {
     if (dataEntrega) {
       if (!delivery.start_date) {
         return res
-          .status(400)
+          .status(200)
           .json({ error: 'O produto não foi retirado para entrega.' });
       }
 
       if (delivery.end_date) {
         return res
-          .status(400)
+          .status(200)
           .json({ error: 'O produto já foi entregue ao destinatário.' });
       }
 
       if (!req.file) {
         return res
-          .status(400)
+          .status(200)
           .json({ error: 'Você precisa enviar imagem do produto entregue.' });
       }
 

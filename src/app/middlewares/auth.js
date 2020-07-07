@@ -15,7 +15,6 @@ export default async (req, res, next) => {
     // promisify, transforma uma função que precisa de callback para utilizar
     // async await
     const decoded = await promisify(jwt.verify)(token, authConfig.secret);
-    console.log(decoded);
 
     req.userId = decoded.id; // Id do user autenticado
     return next();
